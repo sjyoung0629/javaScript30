@@ -10,6 +10,23 @@ body,html {
   font-family: sans-serif;
 }
 
+.random_btn {
+  width: 20rem;
+  height: 5rem;
+  border: solid 1px #394247;
+  background-color: #ffffff;
+  opacity: 0.8;
+  line-height: 55px;
+  border-radius: 80px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.random_play {
+  color: #394247;
+  font-size: 3rem;
+}
+
 .keys {
   display: flex;
   flex: 1;
