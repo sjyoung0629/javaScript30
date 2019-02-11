@@ -9,14 +9,47 @@
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
   <div class="controls">
-    <label for="spacing">Spacing:</label>
+    <label for="spacing">Spacing: </label>
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
-    <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <label for="blur">Blur: </label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="0" data-sizing="px">
 
-    <label for="base">Base Color</label>
+    <label for="base">Base-color</label>
     <input id="base" type="color" name="base" value="#ffc600">
+
+    <div class="reflect">
+        <label for="reflectDirection">Reflect-direction: </label>
+        <div class="reflect_direction">
+          <div class="direct_option" name="above">above</div>
+          <div class="bar"></div>
+          <div class="direct_option" name="below">below</div>
+          <div class="bar"></div>
+          <div class="direct_option" name="left">left</div>
+          <div class="bar"></div>
+          <div class="direct_option" name="right">right</div>
+        </div>
+    
+        <label for="reflectValue">Reflect-value: </label>
+        <input id="reflectValue" type="range" name="reflectValue" min="0" max="100" value="10" data-sizing="px">
+    </div>
+
+    <div class="shadow">
+        <label for="shadowLeft">Shadow-left: </label>
+        <input id="shadowLeft" type="range" name="shadowLeft" min="-50" max="50" value="10" data-sizing="px">
+    
+        <label for="shadowRight">Shadow-right: </label>
+        <input id="shadowRight" type="range" name="shadowRight" min="-50" max="50" value="10" data-sizing="px">
+    
+        <label for="shadowBlur">Shadow-blur: </label>
+        <input id="shadowBlur" type="range" name="shadowBlur" min="0" max="25" value="10" data-sizing="px">
+    
+        <label for="shadowSpread">Shadow-spread: </label>
+        <input id="shadowSpread" type="range" name="shadowSpread" min="-50" max="50" value="10" data-sizing="px">
+    
+        <label for="shadowColor">Shadow-color: </label>
+        <input id="shadowColor" type="color" name="shadowColor" value="#ffc600">
+    </div>
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">

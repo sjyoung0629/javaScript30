@@ -1,17 +1,50 @@
 :root {
     --base: #ffc600;
     --spacing: 10px;
-    --blur: 10px;
+    --blur: 0px;
+    --shadowLeft: 10px;
+    --shadowRight: 10px;
+    --shadowBlur: 10px;
+    --shadowSpread: 20px;
+    --shadowColor: var(--base);
+    --reflectValue: 10px;
+    --reflectOption: below;
   }
 
   img {
     padding: var(--spacing);
     background: var(--base);
     filter: blur(var(--blur));
+    box-shadow: var(--shadowLeft) var(--shadowRight) var(--shadowBlur) var(--shadowSpread) var(--shadowColor);
+    -webkit-box-reflect: var(--reflectOption) var(--reflectValue);
   }
 
   .hl {
     color: var(--base);
+  }
+
+  .reflect {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .reflect_direction {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .direct_option {
+    margin: 5px;
+  }
+
+  .bar {
+    height: 15px;
+    border: 1px solid white;
   }
 
   /*
@@ -24,7 +57,7 @@
     color: white;
     font-family: 'helvetica neue', sans-serif;
     font-weight: 100;
-    font-size: 50px;
+    font-size: 20px;
   }
 
   .controls {
