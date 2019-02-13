@@ -30,6 +30,18 @@ const fifteen = inventors.filter(function(inventor) {
 });
 console.table(fifteen);
 
+//example2
+const numbers = [1,2,3,4,5];
+const oddNumber = numbers.filter(val => val % 2 !== 0);
+console.log("홀수 = " + oddNumber);
+
+// every, some
+const isAllOdd = numbers.every(val => val % 2 != 0);
+console.log("isAllOdd = " + isAllOdd);
+
+const isSomeOdd = numbers.some(val => val % 2 != 0);
+console.log("isSomeOdd = " + isSomeOdd);
+
 // ES6
 const fifteen2 = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year < 1600));
 console.table(fifteen2);
@@ -38,6 +50,12 @@ console.table(fifteen2);
 // 2. Give us an array of the inventors' first and last names
 const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
 console.log(fullNames);
+
+// Array.prototype.forEach()
+// forEach 는 리턴값이 없다 !
+let namesArr = [];
+const fullNames2 = inventors.forEach(inventor => namesArr.push(`${inventor.first} ${inventor.last}`));
+console.log(namesArr);
 
 // Array.prototype.sort()
 // 3. Sort the inventors by birthdate, oldest to youngest
@@ -99,3 +117,133 @@ const sum = data.reduce((obj, item) => {
     return obj;
 }, {});
 console.log(sum);
+
+// hasOwnProperty 사용
+const sum2 = data.reduce((obj, item) => {
+    if(obj.hasOwnProperty(item)) {
+        obj[item]++;
+
+    } else {
+        obj[item] = 1;
+    }
+    return obj;
+}, {});
+console.log(sum2);
+
+// reduce vs filter+map
+let initialValue = [];
+const reducer = (accumulator, value) => {
+    if (value % 2 != 0) {
+        accumulator.push(value * 2);
+    }
+    return accumulator;
+}
+/**
+ * reduce 는 배열을 한 번만 순회하면 되지만
+ * filter + map 은 배열을 두 번 순회해야 한다
+ * 
+ * filter + map 이 직관적이긴 하지만,
+ * reduce 는 reducer 함수를 선언함으로서 재사용성이 더 높다
+ */
+let reduce_result = numbers.reduce(reducer, []);
+console.log("reduce = " + reduce_result);
+
+let filter_map_result = numbers.filter(x => x % 2 != 0).map(x => x * 2);
+console.log("filter + map = " + filter_map_result);
+
+// reduce로 평균 구하기
+const data_arr = [1, 2, 3, 4, 5, 6, 1];
+const mean_reducer = (accumulator, value, index, array) => {
+    let sum = accumulator + value;
+    const arr_len = array.length
+    if (index === arr_len - 1) {
+        return sum / arr_len;
+    }
+    return sum;
+};
+// initializer 값을 생략하면, 배열의 첫번째 인자인 1(data_arr[0])이 accumulator로 넘어간다
+const mean_value = data_arr.reduce(mean_reducer);
+console.log("mean = ", mean_value);
+
+/**
+ * flatten (배열 납작하게 만들기)
+ * 깊이가 있는 배열들을 flatten 할 때, 배열을 순회하면서 concat하는 로직을 reduce 활용해서 구현
+ */
+const depth_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+const flatArrayReducer = (accumulator, value, index, array) => {
+    return accumulator.concat(value);
+};
+const flattenData = depth_data.reduce(flatArrayReducer);
+console.log(flattenData);
+
+/**
+ * flattenMap
+ * 배열을 순회하면서 배열의 값으로 들어있는 object의 key 존재여부를 확인하고,
+ * unique한 "cast"를 key로 갖는 배열의 값들을 최종적으로 return
+ */
+const input = [
+    {
+        "title": "슈퍼맨",
+        "year": "2005",
+        "cast": ["장동건", "권상우", "이동욱", "차승원"]
+    },
+    {
+        "title": "스타워즈",
+        "year": "2013",
+        "cast": ["장동건", "신하균", "차승원", "김수현"]
+    },
+    {
+        "title": "고질라",
+        "year": "1997",
+        "cast": []
+    }
+];
+const flatMapReducer = (accumulator, value, index, array) => {
+    const key = "cast";
+    if(value.hasOwnProperty(key) && Array.isArray(value[key])) {
+        value[key].forEach(val => {
+            if(accumulator.indexOf(val) === -1) {
+                accumulator.push(val);
+            }
+        });
+    }
+    return accumulator;
+};
+
+const flattenCastArr = input.reduce(flatMapReducer, []);
+console.log(flattenCastArr);
+
+// reduce: 배열 첫번째(왼쪽)부터 순회 시작
+// reduceRight: 배열의 끝(오른쪽)부터 순회 시작
+const iter_data = [1, 2, 3, 4, "5"];
+const sumData1 = iter_data.reduce((accumulator, value) => {
+    return accumulator + value;
+});
+console.log(sumData1);  // "105"
+
+const sumData2 = iter_data.reduceRight((accumulator, value) => {
+    return accumulator + value;
+});
+console.log(sumData2);  // "054321"
+
+// reduce를 활용한 함수형 프로그래밍
+const initial_value = 1;
+const increment = (input) => { return input + 1; };
+const decrement = (input) => { return input - 1; };
+const double = (input) => { return input * 2; };
+const halve = (input) => { return input / 2; };
+
+const pipeline = [
+    increment,
+    double,
+    decrement,
+    decrement,
+    decrement,
+    halve,
+    double
+];
+// 함수들의 이름이 적힌 배열에 reduce 적용
+const final_value = pipeline.reduce((accumulator, fn) => {
+    return fn(accumulator);
+}, initial_value);
+console.log(final_value);
