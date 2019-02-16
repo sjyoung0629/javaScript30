@@ -247,3 +247,134 @@ const final_value = pipeline.reduce((accumulator, fn) => {
     return fn(accumulator);
 }, initial_value);
 console.log(final_value);
+
+// concat: 인자로 주어진 배열이나 값들을 기존 배열에 합쳐서 새로운 배열을 return
+var a = [1,2,3];
+var b = [4,5,{name: 'Kevin'}];
+var c = a.concat(b);
+console.log(c);     // [1, 2, 3, 4, 5, {name: 'Kevin'}]
+
+/**
+ * 새로운 배열을 생성할 때, (값이 아닌) 객체 참조를 복사한다
+ * 즉, 원본 배열과 새 배열이 같은 객체를 가리키고,
+ * 참조된 객체가 수정되면 둘 다 수정된다 => 아래 예제에서 name = 'Bob'으로 변경됨
+ * 
+ * 객체가 아닌 문자열/숫자일 경우, 값이 복사된다
+ * => 아래 예제에서 원본 배열 값을 'power'로 변경했지만 새 배열에 적용 안됨
+ */
+b[1] = 'power';
+b[2].name = 'Bob';
+console.log(c);     // [1, 2, 3, 4, 5, {name: 'Bob'}]
+console.log(b);     // [4, 'power', {name: 'Bob'}]
+
+// join: 배열의 모든 요소를 연결해 하나의 문자열로 만든다
+// 인자로 특정 문자열을 전달하면 구분자로 사용된다
+const names = ['Shane', 'Alan', 'Osbourne'];
+
+console.log(names.join(' '));   // Shane Alan Osbourne
+console.log(names.join('-'));   // Shane-Alan-Osbourne
+console.log(names.join(''));    // ShaneAlanOsbourne
+console.log(names.join());      // Shane,Alan,Osbourne (default: comma(,))
+
+let name = 'shane osbourne';
+let upper = name.split(' ')
+                .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+                .join(' ');
+console.log(upper);     // Shane Osbourne
+
+// indexOf: 배열에서 지정된 요소를 찾을 수 있는 첫번째 인덱스를 반환하고
+// 존재하지 않으면 -1 을 반환
+let family = ['Shane', 'Sally', 'Isaac'];
+console.log(family.indexOf('Isaac'));   // 2
+console.log(family.indexOf('Kittie'));  // -1
+
+const kittieExists = family.indexOf('Kittie') > -1;
+if (!kittieExists) {
+    family.push('Kittie');
+}
+console.log(family);    // ['Shane', 'Sally', 'Isaac', 'Kittie']
+
+// 두번째 인자는 검색을 시작할 인덱스 default: 0 (전체검색)
+console.log(family.indexOf('Sally', 2));    // -1
+console.log(family.indexOf('Sally', 1));    // 1
+
+// object 검사도 가능
+let shane = {name: 'Shane'};
+let sally = {name: 'Sally'};
+let kittie = {name: 'Kittie'};
+
+family = [shane, sally, kittie];
+console.log(family.indexOf(kittie));    // 2
+
+// 요소의 모든 항목 찾기
+let indices = [];
+const array = ['a', 'b', 'a', 'c', 'a', 'd'];
+const element = 'a';
+
+// 방법 1
+let idx = array.indexOf(element);
+while(idx != -1) {
+    indices.push(idx);
+    idx = array.indexOf(element, idx + 1);
+}
+
+// 방법 2
+array.forEach((v, i) => {
+    if (v === element) {
+        indices.push(i);
+    }
+});
+
+// slice: 어떤 배열의 begin부터 end까지(end 미포함)에 대한 얕은 복사본을 새로운 배열 객체로 반환
+// 원본은 수정되지 않음
+let items = [1,2,3,4,5];
+let copy = items.slice();
+
+copy[0] = 100;
+console.log(items);     // [1, 2, 3, 4, 5]
+console.log(copy);      // [100, 2, 3, 4, 5]
+
+let copy2 = items.slice(2, 3);  // [3]
+let copy3 = items.slice(2);     // [3,4,5]
+let copy4 = items.slice(-2);    // [4,5]
+let copy5 = items.slice(1, -1); // [2,3,4]
+
+/**
+ * 얕은 복사 vs 깊은 복사
+ * shallow copy vs deep copy
+ * 
+ * - shallow copy(얕은 복사)
+ * 변수에 객체를 저장하면, 실제 값이 아니라 객체의 참조값을 저장하게 된다
+ * 따라서 객체를 = 을 이용해 복사하면 참조값만 복사되어 원본 객체값이 변경되면 둘 다 영향을 받는다
+ * 
+ * - deep copy(깊은 복사)
+ * 기본 자료형(숫자, 문자열, boolean)을 복사할 때는 값을 완전히 복사한다
+ */
+
+// 배열의 깊은 복사 -> slice() 활용
+let copyArray = ['a', 'b', 'c'];
+var deepCopyArr = Array.prototype.slice.call(copyArray);
+copyArray[0] = 'd';
+console.log(copyArray);     // ['d', 'b', 'c']
+console.log(deepCopyArr);   // ['a', 'b', 'c']
+
+// 그러나, 배열 안 요소가 객체라면 또다시 얕은 복사 발생
+let person = {name: 'Shane'};
+let personArray = [1, person];
+let personCopy = personArray.slice();
+
+personCopy[1].name = 'Sally';
+console.log(personArray);     // [1, {name: 'Sally'}]
+console.log(personCopy);      // [1, {name: 'Sally'}]
+
+// 객체의 깊은 복사 -> deepCopy() 메소드 구현
+const deepCopy = (obj) => {
+    let copyObj = {};
+    for (let attr in obj) {
+        if (obj.hasOwnProperty(attr)) {
+            copyObj[attr] = obj[attr];
+        }
+    }
+    return copyObj;
+}
+
